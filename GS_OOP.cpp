@@ -365,7 +365,6 @@ int main (int argc, char *argv[]) {
 	fstream dataSheet (dataSheetFileName);
 	dataSheet >> Capsule::i_bound >> Capsule::j_bound >> Capsule::k_bound;
 	int totalSize = Capsule::totalSize = Capsule::i_bound * Capsule::j_bound * Capsule::k_bound;
-
 	if (my_id == root_process) {		
 		vector<double> x (totalSize, 1.0);
 		vector<double> b (totalSize);
@@ -400,10 +399,11 @@ int main (int argc, char *argv[]) {
 			ierr = MPI_Recv(&mainCull.x_block[0], mainCull.blockSize, MPI_DOUBLE, mainCull.core_linear, send_data_tag, MPI_COMM_WORLD, &status);
 			mainCull.syncBackAtRoot(x);
 		}
-
+		/*
 		for (double val : x) {
 			printf("%f\n", val);
 		}
+		*/
 
 
 	}
@@ -415,7 +415,8 @@ int main (int argc, char *argv[]) {
 		ierr = MPI_Recv(&capsule.x_block[0], capsule.blockSize, MPI_DOUBLE, root_process, send_data_tag, MPI_COMM_WORLD, &status);
 		ierr = MPI_Recv(&capsule.b_block[0], capsule.blockSize, MPI_DOUBLE, root_process, send_data_tag, MPI_COMM_WORLD, &status);
 		
-		int n = 1;
+		int n = 10;
+		clock_t t0 = clock();
 		while (n--) {
 			capsule.GS_Z_block_update();
 			capsule.prepareSendHalo();
@@ -423,6 +424,9 @@ int main (int argc, char *argv[]) {
 			capsule.haloRecv();
 			capsule.updateFromRecvHalo();
 		}
+		clock_t t1 = clock();
+    	double elapsed_secs = double(t1 - t0) / CLOCKS_PER_SEC;
+		printf("Core: %02i, seconds_elapsed : %f\n", my_id, elapsed_secs);
 		capsule.sendBackToRoot();
 		
 	}

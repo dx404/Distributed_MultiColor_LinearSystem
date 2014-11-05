@@ -1,11 +1,14 @@
 // main.cpp
 #include <iostream>
 #include <vector>
+#include <ctime>
 #include <mpi.h>
 using namespace std;
 
 #define send_data_tag 2014
 #define return_data_tag 2015
+
+time_t timer;
 
 int zmix(int i, int j, int k, int bitWidth) {
     int zVal = 0;
