@@ -59,7 +59,7 @@ class Capsule {
 public:
 	static MPI_Status status;
 	static int i_bound, j_bound, k_bound, totalSize;
-	static int numCore_i, numCore_j, numCore_k;
+	static int numCore_i, numCore_j, numCore_k, coresOnDuty, root_process;
 	static int halo_width;
 
 	int core_i, core_j, core_k, core_linear;
@@ -79,6 +79,8 @@ public:
 	Capsule (int in_core_i, int in_core_j, int in_core_k) :
 		core_i(in_core_i), core_j(in_core_j), core_k(in_core_k)
 	{ 
+		coresOnDuty  = numCore_i * numCore_j * numCore_k;
+		root_process = numCore_i * numCore_j * numCore_k;
 		core_linear = core_i * numCore_j * numCore_k + core_j * numCore_k + core_k;
 
 		iBlockSize = (i_bound % numCore_i) ? i_bound / numCore_i + 1: i_bound / numCore_i;
@@ -290,6 +292,27 @@ public:
 		}
 	}
 
+	int sendBackToRoot () {
+		return MPI_Send (&x_block[0], blockSize , MPI_DOUBLE, root_process, send_data_tag, MPI_COMM_WORLD);
+	}
+
+	void syncBackAtRoot(vector<double> &x) {
+		for (int i_sub = 0; i_sub < iExtBlockSize; i_sub++) 
+		for (int j_sub = 0; j_sub < jExtBlockSize; j_sub++) 
+		for (int k_sub = 0; k_sub < kExtBlockSize; k_sub++) {
+			if (iStart + i_sub < 0 || iStart + i_sub >= i_bound || 
+				jStart + j_sub < 0 || jStart + j_sub >= j_bound || 
+				kStart + k_sub < 0 || kStart + k_sub >= k_bound ) 
+				continue;
+			int srcPos = 
+				  (iStart + i_sub) * j_bound * k_bound 
+				+ (jStart + j_sub) * k_bound 
+				+ (kStart + k_sub) ;
+			int targetPos = zmix(i_sub, j_sub, k_sub);
+			x[srcPos] = x_block[targetPos];
+		}
+	}
+
 	void betaSend() {
 		int n = 1, my_id;
 		int cores = numCore_i * numCore_j * numCore_k;
@@ -309,6 +332,8 @@ int Capsule::totalSize = 1;
 int Capsule::numCore_i = 1;
 int Capsule::numCore_j = 1;
 int Capsule::numCore_k = 1;
+int Capsule::coresOnDuty = 1;
+int Capsule::root_process = 1;
 int Capsule::halo_width = 1;
 
 int main (int argc, char *argv[]) {
@@ -356,18 +381,30 @@ int main (int argc, char *argv[]) {
 		for (int core_i = 0; core_i < numCore_i; core_i++)
 		for (int core_j = 0; core_j < numCore_j; core_j++)
 		for (int core_k = 0; core_k < numCore_k; core_k++) {
-			int core_linear = core_i * numCore_j * numCore_k + core_j * numCore_k + core_k;
-
 			vector<int> core_pack = {core_i, core_j, core_k};
 			Capsule mainCull (core_i, core_j, core_k);
 			vector<double> x_block = mainCull.extractFrom(x);
 			vector<double> b_block = mainCull.extractFrom(b);
 
-			ierr = MPI_Send (&core_pack[0], 3 , MPI_INT, core_linear, send_data_tag, MPI_COMM_WORLD);
-			ierr = MPI_Send (&x_block[0], x_block.size(), MPI_DOUBLE, core_linear, send_data_tag, MPI_COMM_WORLD);
-			ierr = MPI_Send (&b_block[0], b_block.size(), MPI_DOUBLE, core_linear, send_data_tag, MPI_COMM_WORLD);
+			ierr = MPI_Send (&core_pack[0], 3 , MPI_INT, mainCull.core_linear, send_data_tag, MPI_COMM_WORLD);
+			ierr = MPI_Send (&x_block[0], x_block.size(), MPI_DOUBLE, mainCull.core_linear, send_data_tag, MPI_COMM_WORLD);
+			ierr = MPI_Send (&b_block[0], b_block.size(), MPI_DOUBLE, mainCull.core_linear, send_data_tag, MPI_COMM_WORLD);
 
 		}
+
+		for (int core_i = 0; core_i < numCore_i; core_i++)
+		for (int core_j = 0; core_j < numCore_j; core_j++)
+		for (int core_k = 0; core_k < numCore_k; core_k++) {
+			vector<int> core_pack = {core_i, core_j, core_k};
+			Capsule mainCull (core_i, core_j, core_k);
+			ierr = MPI_Recv(&mainCull.x_block[0], mainCull.blockSize, MPI_DOUBLE, mainCull.core_linear, send_data_tag, MPI_COMM_WORLD, &status);
+			mainCull.syncBackAtRoot(x);
+		}
+
+		for (double val : x) {
+			printf("%f\n", val);
+		}
+
 
 	}
 	else if (my_id < root_process) { 
@@ -378,7 +415,7 @@ int main (int argc, char *argv[]) {
 		ierr = MPI_Recv(&capsule.x_block[0], capsule.blockSize, MPI_DOUBLE, root_process, send_data_tag, MPI_COMM_WORLD, &status);
 		ierr = MPI_Recv(&capsule.b_block[0], capsule.blockSize, MPI_DOUBLE, root_process, send_data_tag, MPI_COMM_WORLD, &status);
 		
-		int n = 10;
+		int n = 1;
 		while (n--) {
 			capsule.GS_Z_block_update();
 			capsule.prepareSendHalo();
@@ -386,10 +423,9 @@ int main (int argc, char *argv[]) {
 			capsule.haloRecv();
 			capsule.updateFromRecvHalo();
 		}
+		capsule.sendBackToRoot();
 		
 	}
-
 	ierr = MPI_Finalize();
-
 	return 0;
 }

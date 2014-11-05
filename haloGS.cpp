@@ -343,6 +343,9 @@ int main (int argc, char *argv[]) {
 			}
 
 		}
+		for (double val : x) {
+			printf("%f\n", val);
+		}
 	}
 	else if (my_id < root_process){
 		ierr = MPI_Recv(&i_bound, 1, MPI_INT, root_process, send_data_tag, MPI_COMM_WORLD, &status);
