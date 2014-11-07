@@ -57,7 +57,7 @@ vector<int> zDeMix(int zVal, int bitWidth) {
 
 class Capsule {
 public:
-	static MPI_Status status;
+	static MPI::Status status;
 	static int i_bound, j_bound, k_bound, totalSize;
 	static int numCore_i, numCore_j, numCore_k, coresOnDuty, root_process;
 	static int halo_width;
@@ -236,7 +236,7 @@ public:
 			// int destHaloID = (1-di)*9 + (1-dj)*3 + (1-dk); // implicit
 			int haloSize = sendHalo[srcHaloID].size();
 			if (haloSize) {
-				ierr = MPI_Send (&sendHalo[srcHaloID][0], haloSize , MPI_DOUBLE, destCoreLinear, send_data_tag, MPI_COMM_WORLD);
+				MPI::COMM_WORLD.Send (&sendHalo[srcHaloID][0], haloSize , MPI_DOUBLE, destCoreLinear, send_data_tag);
 			}
 			
 		}
@@ -261,7 +261,7 @@ public:
 			
 			int haloSize = recvHalo[destHaloID].size(); 
 			if (haloSize) {
-				ierr = MPI_Recv(&recvHalo[destHaloID][0], haloSize, MPI_DOUBLE, srcCoreLinear, send_data_tag, MPI_COMM_WORLD, &status);
+				MPI::COMM_WORLD.Recv(&recvHalo[destHaloID][0], haloSize, MPI_DOUBLE, srcCoreLinear, send_data_tag);
 			}
 		}
 		return ierr;
@@ -292,8 +292,8 @@ public:
 		}
 	}
 
-	int sendBackToRoot () {
-		return MPI_Send (&x_block[0], blockSize , MPI_DOUBLE, root_process, send_data_tag, MPI_COMM_WORLD);
+	void sendBackToRoot () {
+		MPI::COMM_WORLD.Send (&x_block[0], blockSize , MPI_DOUBLE, root_process, send_data_tag);
 	}
 
 	void syncBackAtRoot(vector<double> &x) {
@@ -317,14 +317,14 @@ public:
 		int n = 1, my_id;
 		int cores = numCore_i * numCore_j * numCore_k;
 		// MPI_Send (&n, 1 , MPI_INT, (core_linear+1) % cores, send_data_tag, MPI_COMM_WORLD);
-		MPI_Send (&n, 1 , MPI_INT, (core_linear + 1) % cores, send_data_tag, MPI_COMM_WORLD);
+		MPI::COMM_WORLD.Send (&n, 1 , MPI_INT, (core_linear + 1) % cores, send_data_tag);
 
 	}
 
 
 } ;
 
-MPI_Status Capsule::status;
+MPI::Status Capsule::status;
 int Capsule::i_bound = 1;
 int Capsule::j_bound = 1; 
 int Capsule::k_bound = 1; 
@@ -342,12 +342,12 @@ int main (int argc, char *argv[]) {
 		return 107;
 	}
 
-	MPI_Status status;
-	int my_id, num_procs, an_id, sender, ierr;
+	MPI::Status status;
+	int an_id, sender, ierr;
 
-	ierr = MPI_Init(&argc, &argv);
-	ierr = MPI_Comm_rank(MPI_COMM_WORLD, &my_id);
-	ierr = MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
+	MPI::Init(argc, argv);
+	int my_id 	  = MPI::COMM_WORLD.Get_rank();
+	int num_procs = MPI::COMM_WORLD.Get_size();
 
 	int numCore_i  = Capsule::numCore_i  = atoi(argv[1]);
 	int numCore_j  = Capsule::numCore_j  = atoi(argv[2]);
@@ -386,9 +386,9 @@ int main (int argc, char *argv[]) {
 			vector<double> x_block = mainCull.extractFrom(x);
 			vector<double> b_block = mainCull.extractFrom(b);
 
-			ierr = MPI_Send (&core_pack[0], 3 , MPI_INT, mainCull.core_linear, send_data_tag, MPI_COMM_WORLD);
-			ierr = MPI_Send (&x_block[0], x_block.size(), MPI_DOUBLE, mainCull.core_linear, send_data_tag, MPI_COMM_WORLD);
-			ierr = MPI_Send (&b_block[0], b_block.size(), MPI_DOUBLE, mainCull.core_linear, send_data_tag, MPI_COMM_WORLD);
+			MPI::COMM_WORLD.Send (&core_pack[0], 3 , MPI_INT, mainCull.core_linear, send_data_tag);
+			MPI::COMM_WORLD.Send (&x_block[0], x_block.size(), MPI_DOUBLE, mainCull.core_linear, send_data_tag);
+			MPI::COMM_WORLD.Send (&b_block[0], b_block.size(), MPI_DOUBLE, mainCull.core_linear, send_data_tag);
 
 		}
 
@@ -397,7 +397,7 @@ int main (int argc, char *argv[]) {
 		for (int core_k = 0; core_k < numCore_k; core_k++) {
 			vector<int> core_pack = {core_i, core_j, core_k};
 			Capsule mainCull (core_i, core_j, core_k);
-			ierr = MPI_Recv(&mainCull.x_block[0], mainCull.blockSize, MPI_DOUBLE, mainCull.core_linear, send_data_tag, MPI_COMM_WORLD, &status);
+			MPI::COMM_WORLD.Recv(&mainCull.x_block[0], mainCull.blockSize, MPI_DOUBLE, mainCull.core_linear, send_data_tag);
 			mainCull.syncBackAtRoot(x);
 		}
 		/*
@@ -408,11 +408,11 @@ int main (int argc, char *argv[]) {
 	}
 	else if (my_id < root_process) { 
 		vector<int> core_pack (3);
-		ierr = MPI_Recv(&core_pack[0], 3, MPI_INT, root_process, send_data_tag, MPI_COMM_WORLD, &status);
+		MPI::COMM_WORLD.Recv(&core_pack[0], 3, MPI_INT, root_process, send_data_tag);
 		Capsule capsule (core_pack[0], core_pack[1], core_pack[2]);
 		
-		ierr = MPI_Recv(&capsule.x_block[0], capsule.blockSize, MPI_DOUBLE, root_process, send_data_tag, MPI_COMM_WORLD, &status);
-		ierr = MPI_Recv(&capsule.b_block[0], capsule.blockSize, MPI_DOUBLE, root_process, send_data_tag, MPI_COMM_WORLD, &status);
+		MPI::COMM_WORLD.Recv (&capsule.x_block[0], capsule.blockSize, MPI_DOUBLE, root_process, send_data_tag);
+		MPI::COMM_WORLD.Recv (&capsule.b_block[0], capsule.blockSize, MPI_DOUBLE, root_process, send_data_tag);
 		
 		int n = iterationSteps;
 		double err = 1;
@@ -430,6 +430,6 @@ int main (int argc, char *argv[]) {
 		capsule.sendBackToRoot();
 		
 	}
-	ierr = MPI_Finalize();
+	MPI::Finalize();
 	return 0;
 }
