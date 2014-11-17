@@ -97,6 +97,7 @@ public:
 	vector<vector<double> > sendHalo; // x
 	vector<vector<double> > recvHalo; // x
 
+
 	Capsule (int in_core_i, int in_core_j, int in_core_k) :
 		core_i(in_core_i), core_j(in_core_j), core_k(in_core_k)
 	{ 
@@ -160,7 +161,7 @@ public:
 	    for (int i : i_comp)
 	    for (int j : j_comp)
 	    for (int k : k_comp) {
-	    	if (i | j | k != centerIndex)
+	    	if ((i | j | k) != centerIndex)
 	        	zNeighborIndex.push_back(i | j | k);
 	    }
 	    
@@ -380,6 +381,7 @@ public:
 					int zAdjID = zmix(i_sub+di, j_sub+dj, k_sub+dk);
 					val += x_block[zAdjID]; // add coefficent later
 				}
+
 			val = (b_block[zID] - val) / (-26.0);
 			// only count inner part change total.
 			if (i_sub >= halo_width && j_sub >= halo_width && k_sub >= halo_width && 
@@ -391,30 +393,73 @@ public:
 		return normChange;
 	}
 
+
+
+
 	double GS_Z_block_update002 () {
 		double normChange = 0;
+		vector<int> zAdjIDArray;
+		vector<int> i_comp, j_comp, k_comp;
+		zAdjIDArray.reserve(27);
+		i_comp.reserve(4); 
+		j_comp.reserve(4); 
+		k_comp.reserve(4);
+
 		for (int zID = 0; zID < x_block.size(); zID++) {
+			zAdjIDArray.clear();
+			i_comp.clear();
+			j_comp.clear();
+			k_comp.clear();
+			// zNeighbors(zAdjIDArray, zID);
 
-			int i_sub = memoInterR[(zID>>2) & octMask_k];
-			int j_sub = memoInterR[(zID>>1) & octMask_k];
-			int k_sub = memoInterR[ zID & octMask_k]; 
+			// int i_sub = memoInterR[(zID>>2) & octMask_k];
+			// int j_sub = memoInterR[(zID>>1) & octMask_k];
+			// int k_sub = memoInterR[ zID & octMask_k]; 
 
-			if (i_sub >= iExtBlockSize     || j_sub >= jExtBlockSize     || k_sub >= kExtBlockSize    || 
-				iStart + i_sub < 0         || jStart + j_sub <  0        || kStart + k_sub <  0       || 
-				iStart + i_sub >= i_bound  || jStart + j_sub >= j_bound  || kStart + k_sub >= k_bound )
-				continue;
+			// if (i_sub >= iExtBlockSize     || j_sub >= jExtBlockSize     || k_sub >= kExtBlockSize    || 
+			// 	iStart + i_sub < 0         || jStart + j_sub <  0        || kStart + k_sub <  0       || 
+			// 	iStart + i_sub >= i_bound  || jStart + j_sub >= j_bound  || kStart + k_sub >= k_bound )
+			// 	continue;
 
-			vector<int> zAdjIDArray;
-			zNeighbors(zAdjIDArray, zID);
+			int centerIndex = zID;
+			
+		    if (centerIndex & octMask_i)
+		        i_comp.push_back(((centerIndex & octMask_i)  - 1) & octMask_i);
+		    i_comp.push_back(centerIndex & octMask_i);
+		    if ((centerIndex & octMask_i) != i_bound_inter)
+		        i_comp.push_back(((centerIndex | (~octMask_i)) + 1) & octMask_i);
+		    
+		    if (centerIndex & octMask_j)
+		        j_comp.push_back(((centerIndex & octMask_j)  - 1) & octMask_j);
+		    j_comp.push_back(centerIndex & octMask_j);
+		    if ((centerIndex & octMask_j) != j_bound_inter)
+		        j_comp.push_back(((centerIndex | (~octMask_j)) + 1) & octMask_j);
+		    
+		    if (centerIndex  & octMask_k)
+		        k_comp.push_back(((centerIndex & octMask_k)  - 1) & octMask_k);
+		    k_comp.push_back(centerIndex & octMask_k);
+		    if ((centerIndex & octMask_k) != k_bound_inter)
+		        k_comp.push_back(((centerIndex | (~octMask_k)) + 1) & octMask_k);
+		    
+		    for (int i : i_comp)
+		    for (int j : j_comp)
+		    for (int k : k_comp) {
+		    	if ((i | j | k) != centerIndex)
+		        	zAdjIDArray.push_back(i | j | k);
+		    }
+
 
 			double val = 0;
 			for (int zAdjID : zAdjIDArray) {
-					val += x_block[zAdjID]; 
-					normChange += (val - x_block[zID]) * (val - x_block[zID]);
+					val += x_block[zAdjID];
 			}
+
 			val = (b_block[zID] - val) / (-26.0);
+			normChange += (val - x_block[zID]) * (val - x_block[zID]);
 			x_block[zID] = val;
+
 		}
+
 		normChange = sqrt(normChange) / (iBlockSize * jBlockSize * kBlockSize);
 		return normChange;
 	}
@@ -657,8 +702,8 @@ int main (int argc, char *argv[]) {
 		double err = 1, max_err = 1;
 		clock_t t0 = clock();
 		while (n--) {
-			// err = capsule.GS_Z_block_update002();
-			err = capsule.GS_Z_block_update();
+			err = capsule.GS_Z_block_update002();
+			// err = capsule.GS_Z_block_update(); 
 			capsule.prepareSendHalo();
 			capsule.haloExchange(); // capsule.haloSend();  capsule.haloRecv();
 			capsule.updateFromRecvHalo();
