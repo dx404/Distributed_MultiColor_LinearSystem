@@ -464,6 +464,72 @@ public:
 		return normChange;
 	}
 
+	double GS_Z_block_update003 () {
+		double normChange = 0;
+		int zAdjIDArray[27];
+		int i_comp[3], j_comp[3], k_comp[3];
+
+		for (int zID = 0; zID < x_block.size(); zID++) {
+			int iStep = 0, jStep = 0, kStep = 0;
+			// zNeighbors(zAdjIDArray, zID);
+
+			// int i_sub = memoInterR[(zID>>2) & octMask_k];
+			// int j_sub = memoInterR[(zID>>1) & octMask_k];
+			// int k_sub = memoInterR[ zID & octMask_k]; 
+
+			// if (i_sub >= iExtBlockSize     || j_sub >= jExtBlockSize     || k_sub >= kExtBlockSize    || 
+			// 	iStart + i_sub < 0         || jStart + j_sub <  0        || kStart + k_sub <  0       || 
+			// 	iStart + i_sub >= i_bound  || jStart + j_sub >= j_bound  || kStart + k_sub >= k_bound )
+			// 	continue;
+			
+		    if (zID & octMask_i){
+		        i_comp[iStep++] = ((zID & octMask_i)  - 1) & octMask_i;
+		    }
+		    i_comp[iStep++] = zID & octMask_i;
+		    if ((zID & octMask_i) != i_bound_inter){
+		         i_comp[iStep++] = ((zID | (~octMask_i)) + 1) & octMask_i;
+		    }
+		    
+		    if (zID & octMask_j){
+		        j_comp[jStep++] = ((zID & octMask_j)  - 1) & octMask_j;
+		    }
+		    j_comp[jStep++] = zID & octMask_j;
+		    if ((zID & octMask_j) != j_bound_inter){
+		        j_comp[jStep++] = ((zID | (~octMask_j)) + 1) & octMask_j;
+		    }
+		    
+		    if (zID  & octMask_k){
+		        k_comp[kStep++] = ((zID & octMask_k)  - 1) & octMask_k;
+		    }
+		    k_comp[kStep++] = zID & octMask_k;
+		    if ((zID & octMask_k) != k_bound_inter){
+		       k_comp[kStep++] = ((zID | (~octMask_k)) + 1) & octMask_k;
+		    }
+
+		   int t = 0;
+		   for (int i = 0; i < iStep; i++)
+		   for (int j = 0; j < jStep; j++)
+		   for (int k = 0; k < kStep; k++) {
+		   		int nzID = i_comp[i] | j_comp[j] | k_comp[k];
+		    	if (nzID != zID)
+		        	zAdjIDArray[t++] = nzID;
+		    }
+
+			double val = 0;
+			for (int s = 0; s < t; s++) {
+					val += x_block[zAdjIDArray[s]];
+			}
+
+			val = (b_block[zID] - val) / (-26.0);
+			normChange += (val - x_block[zID]) * (val - x_block[zID]);
+			x_block[zID] = val;
+
+		}
+
+		normChange = sqrt(normChange) / (iBlockSize * jBlockSize * kBlockSize);
+		return normChange;
+	}
+
 	int haloSend () {
 		int ierr;
 		for (int di = -1; di <= 1; di++) 
@@ -702,7 +768,7 @@ int main (int argc, char *argv[]) {
 		double err = 1, max_err = 1;
 		clock_t t0 = clock();
 		while (n--) {
-			err = capsule.GS_Z_block_update002();
+			err = capsule.GS_Z_block_update003();
 			// err = capsule.GS_Z_block_update(); 
 			capsule.prepareSendHalo();
 			capsule.haloExchange(); // capsule.haloSend();  capsule.haloRecv();
