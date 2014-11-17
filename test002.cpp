@@ -42,19 +42,25 @@ int main(int argc, char *argv[]) {
       printf(":: %i :: %i\n", rank, val);
 
   }
-
   
-  if (rank == 1){
-    int x = 10, y = 20;
-    MPI::COMM_WORLD.Send(&x, 1, MPI_INT, 2, 127);
-    MPI::COMM_WORLD.Send(&y, 1, MPI_INT, 2, 128);  
+  MPI::COMM_WORLD.Barrier();
+  if (rank == 0) {
+    printf("=========== %i \n", numtasks);
   }
-  else if (rank == 2) {
-    int x = -10, y = -20;
-    MPI::COMM_WORLD.Recv(&y, 1, MPI_INT, 1, 128);
-    MPI::COMM_WORLD.Recv(&x, 1, MPI_INT, 1, 127);
-    printf("---->2:::::%i %i\n", x, y );
+
+
+  if (rank >= 3) {
+    int t;
+    MPI::COMM_WORLD.Reduce(&rank, &t, 1, MPI::DOUBLE, MPI::SUM, 4);
+    printf("ttttt : %i \n", t); 
   }
+  else {
+    int gg = 0;
+    // MPI::COMM_WORLD.Reduce(&gg, &gg, 1, MPI::DOUBLE, MPI::MAX, 4);
+    // MPI::COMM_WORLD.Reduce(&gg, &gg, 1, MPI::DOUBLE, MPI::MAX, 2);
+  }
+
+
 
   MPI::Finalize();
   return 0;

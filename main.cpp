@@ -8,8 +8,6 @@ using namespace std;
 #define send_data_tag 2014
 #define return_data_tag 2015
 
-time_t timer;
-
 int zmix(int i, int j, int k, int bitWidth) {
     int zVal = 0;
     for (int mask = (1 << (bitWidth-1)); mask; mask >>= 1) {
