@@ -73,6 +73,7 @@ public:
 	int blockBitWidth, blockSize;
 
 	vector<double> x_block, b_block; 
+	vector<double> x_block2, b_block2; 
 
 	int halo_noneUpdate_width;
 
@@ -289,6 +290,164 @@ public:
 	}
 
 	double GS_Z_block_update003 () {
+		double normChange = 0;
+
+		i_bound_inter = memoInter[iExtBlockSize-1] << 2;
+	    j_bound_inter = memoInter[jExtBlockSize-1] << 1;
+	    k_bound_inter = memoInter[kExtBlockSize-1];
+
+	    i_update_low_zmix  = memoInter[halo_noneUpdate_width] << 2;
+	   	j_update_low_zmix  = memoInter[halo_noneUpdate_width] << 1;
+	   	k_update_low_zmix  = memoInter[halo_noneUpdate_width];
+
+	    i_update_high_zmix = memoInter[iExtBlockSize - halo_noneUpdate_width - 1] << 2;
+	    j_update_high_zmix = memoInter[jExtBlockSize - halo_noneUpdate_width - 1] << 1;
+	    k_update_high_zmix = memoInter[kExtBlockSize - halo_noneUpdate_width - 1];
+
+		int zAdjIDArray[27];
+		int i_comp[3], j_comp[3], k_comp[3];
+
+		for (int zID = 0; zID < x_block.size(); zID++) {
+			int iStep = 0, jStep = 0, kStep = 0;
+			// zNeighbors(zAdjIDArray, zID);
+			// int i_sub = memoInterR[(zID>>2) & octMask_k];
+			// int j_sub = memoInterR[(zID>>1) & octMask_k];
+			// int k_sub = memoInterR[ zID & octMask_k]; 
+
+			// if (i_sub >= iExtBlockSize     || j_sub >= jExtBlockSize     || k_sub >= kExtBlockSize    || 
+			// 	iStart + i_sub < 0         || jStart + j_sub <  0        || kStart + k_sub <  0       || 
+			// 	iStart + i_sub >= i_bound  || jStart + j_sub >= j_bound  || kStart + k_sub >= k_bound )
+			// 	continue;
+			
+		    if (zID & octMask_i){
+		        i_comp[iStep++] = ((zID & octMask_i)  - 1)  & octMask_i;
+		    }
+		    i_comp[iStep++] = zID & octMask_i;
+		    if ((zID & octMask_i) != i_bound_inter){
+		         i_comp[iStep++] = ((zID | (~octMask_i)) + 1) & octMask_i;
+		    }
+		    
+		    if (zID & octMask_j){
+		        j_comp[jStep++] = ((zID & octMask_j)  - 1) & octMask_j;
+		    }
+		    j_comp[jStep++] = zID & octMask_j;
+		    if ((zID & octMask_j) != j_bound_inter){
+		        j_comp[jStep++] = ((zID | (~octMask_j)) + 1) & octMask_j;
+		    }
+		    
+		    if (zID  & octMask_k){
+		        k_comp[kStep++] = ((zID & octMask_k)  - 1) & octMask_k;
+		    }
+		    k_comp[kStep++] = zID & octMask_k;
+		    if ((zID & octMask_k) != k_bound_inter){
+		       k_comp[kStep++] = ((zID | (~octMask_k)) + 1) & octMask_k;
+		    }
+
+		   int t = 0;
+		   for (int i = 0; i < iStep; i++)
+		   for (int j = 0; j < jStep; j++)
+		   for (int k = 0; k < kStep; k++) {
+		   		int nzID = i_comp[i] | j_comp[j] | k_comp[k];
+		    	if (nzID != zID)
+		        	zAdjIDArray[t++] = nzID;
+		    }
+
+			double val = 0;
+			for (int s = 0; s < t; s++) {
+					val += x_block[zAdjIDArray[s]];
+			}
+
+			val = (b_block[zID] - val) / (-26.0);
+			normChange += (val - x_block[zID]) * (val - x_block[zID]);
+			x_block[zID] = val;
+			// cout << "::" << val << endl;
+
+		}
+
+		normChange = sqrt(normChange) / (iExtBlockSize * jExtBlockSize * kExtBlockSize);
+		return normChange;
+	}
+
+	double GS_Z_block_update004 () {
+		double normChange = 0;
+
+	    i_update_low_zmix  = memoInter[halo_noneUpdate_width] << 2;
+	   	j_update_low_zmix  = memoInter[halo_noneUpdate_width] << 1;
+	   	k_update_low_zmix  = memoInter[halo_noneUpdate_width];
+
+	    i_update_high_zmix = memoInter[iExtBlockSize - halo_noneUpdate_width] << 2;
+	    j_update_high_zmix = memoInter[jExtBlockSize - halo_noneUpdate_width] << 1;
+	    k_update_high_zmix = memoInter[kExtBlockSize - halo_noneUpdate_width];
+
+		int zAdjIDArray[27];
+		int i_comp[3], j_comp[3], k_comp[3];
+
+		for (int zID = 0; zID < x_block.size(); zID++) {
+			int iStep = 0, jStep = 0, kStep = 0;
+			// zNeighbors(zAdjIDArray, zID);
+			// int i_sub = memoInterR[(zID>>2) & octMask_k];
+			// int j_sub = memoInterR[(zID>>1) & octMask_k];
+			// int k_sub = memoInterR[ zID & octMask_k]; 
+
+			if ((zID & octMask_i) < i_update_low_zmix || 
+				(zID & octMask_j) < j_update_low_zmix || 
+				(zID & octMask_k) < k_update_low_zmix || 
+				(zID & octMask_i) >= i_update_high_zmix || 
+				(zID & octMask_j) >= j_update_high_zmix || 
+				(zID & octMask_k) >= k_update_high_zmix ) {
+				continue;
+			}
+			
+		    if (zID & octMask_i){
+		        i_comp[iStep++] = ((zID & octMask_i)  - 1)  & octMask_i;
+		    }
+		    i_comp[iStep++] = zID & octMask_i;
+		    if ((zID & octMask_i) != i_bound_inter){
+		         i_comp[iStep++] = ((zID | (~octMask_i)) + 1) & octMask_i;
+		    }
+		    
+		    if (zID & octMask_j){
+		        j_comp[jStep++] = ((zID & octMask_j)  - 1) & octMask_j;
+		    }
+		    j_comp[jStep++] = zID & octMask_j;
+		    if ((zID & octMask_j) != j_bound_inter){
+		        j_comp[jStep++] = ((zID | (~octMask_j)) + 1) & octMask_j;
+		    }
+		    
+		    if (zID  & octMask_k){
+		        k_comp[kStep++] = ((zID & octMask_k)  - 1) & octMask_k;
+		    }
+		    k_comp[kStep++] = zID & octMask_k;
+		    if ((zID & octMask_k) != k_bound_inter){
+		       k_comp[kStep++] = ((zID | (~octMask_k)) + 1) & octMask_k;
+		    }
+
+		   int t = 0;
+		   for (int i = 0; i < iStep; i++)
+		   for (int j = 0; j < jStep; j++)
+		   for (int k = 0; k < kStep; k++) {
+		   		int nzID = i_comp[i] | j_comp[j] | k_comp[k];
+		    	if (nzID != zID)
+		        	zAdjIDArray[t++] = nzID;
+		    }
+
+			double val = 0;
+			for (int s = 0; s < t; s++) {
+					val += x_block[zAdjIDArray[s]];
+			}
+
+			val = (b_block[zID] - val) / (-26.0);
+			normChange += (val - x_block[zID]) * (val - x_block[zID]);
+			x_block[zID] = val;
+			// cout << "::" << val << endl;
+
+		}
+
+		normChange = sqrt(normChange) / (iExtBlockSize * jExtBlockSize * kExtBlockSize);
+		return this->normChange = normChange;
+	}
+
+		double GS_Z_block_update003 () {
 		double normChange = 0;
 
 		i_bound_inter = memoInter[iExtBlockSize-1] << 2;

@@ -73,8 +73,10 @@ public:
 	int blockBitWidth, blockSize;
 
 	vector<double> x_block, b_block; 
+	vector<double> x_block2, b_block2; 
 
 	int halo_noneUpdate_width;
+	int halo_valid_width;
 
 private: 
 	static MPI::Status status;
@@ -129,6 +131,7 @@ public:
 		recvHalo = haloInit ();
 
 		halo_noneUpdate_width = halo_width ? 1 : 0;
+		halo_valid_width = halo_width;
 	}
 
 
@@ -288,6 +291,8 @@ public:
 		return normChange;
 	}
 
+	
+
 	double GS_Z_block_update003 () {
 		double normChange = 0;
 
@@ -444,6 +449,171 @@ public:
 
 		normChange = sqrt(normChange) / (iExtBlockSize * jExtBlockSize * kExtBlockSize);
 		return this->normChange = normChange;
+	}
+	double GS_Z_block_update005 ();
+
+	double GS_Z_block_update006_exterior () {
+		double normChange = 0;
+
+		int zAdjIDArray[27];
+		int i_comp[3], j_comp[3], k_comp[3];
+
+		for (int di = -1; di <= 1; di++) 
+		for (int dj = -1; dj <= 1; dj++)
+		for (int dk = -1; dk <= 1; dk++) 
+			if (di | dj | dk) {
+				int haloLinearID = (1+di) * 9 + (1+dj) * 3 + (1+dk);
+				int iHaloStart = (di != 1) ? halo_width : iBlockSize;
+				int jHaloStart = (dj != 1) ? halo_width : jBlockSize;
+				int kHaloStart = (dk != 1) ? halo_width : kBlockSize;
+
+				int iHaloWidth = di ? halo_width : iBlockSize;
+				int jHaloWidth = dj ? halo_width : jBlockSize;
+				int kHaloWidth = dk ? halo_width : kBlockSize;
+
+				for (int i_sub = iHaloStart; i_sub < iHaloStart + iHaloWidth; i_sub++) 
+				for (int j_sub = jHaloStart; j_sub < jHaloStart + jHaloWidth; j_sub++) 
+				for (int k_sub = kHaloStart; k_sub < kHaloStart + kHaloWidth; k_sub++) { 
+					int zID = zmix(i_sub, j_sub, k_sub);
+					int iStep = 0, jStep = 0, kStep = 0;
+
+					if ((zID & octMask_i) < i_update_low_zmix || 
+						(zID & octMask_j) < j_update_low_zmix || 
+						(zID & octMask_k) < k_update_low_zmix || 
+						(zID & octMask_i) >= i_update_high_zmix || 
+						(zID & octMask_j) >= j_update_high_zmix || 
+						(zID & octMask_k) >= k_update_high_zmix ) {
+						continue;
+					}
+					
+				    if (zID & octMask_i){
+				        i_comp[iStep++] = ((zID & octMask_i)  - 1)  & octMask_i;
+				    }
+				    i_comp[iStep++] = zID & octMask_i;
+				    if ((zID & octMask_i) != i_bound_inter){
+				         i_comp[iStep++] = ((zID | (~octMask_i)) + 1) & octMask_i;
+				    }
+				    
+				    if (zID & octMask_j){
+				        j_comp[jStep++] = ((zID & octMask_j)  - 1) & octMask_j;
+				    }
+				    j_comp[jStep++] = zID & octMask_j;
+				    if ((zID & octMask_j) != j_bound_inter){
+				        j_comp[jStep++] = ((zID | (~octMask_j)) + 1) & octMask_j;
+				    }
+				    
+				    if (zID  & octMask_k){
+				        k_comp[kStep++] = ((zID & octMask_k)  - 1) & octMask_k;
+				    }
+				    k_comp[kStep++] = zID & octMask_k;
+				    if ((zID & octMask_k) != k_bound_inter){
+				       k_comp[kStep++] = ((zID | (~octMask_k)) + 1) & octMask_k;
+				    }
+
+				   int t = 0;
+				   for (int i = 0; i < iStep; i++)
+				   for (int j = 0; j < jStep; j++)
+				   for (int k = 0; k < kStep; k++) {
+				   		int nzID = i_comp[i] | j_comp[j] | k_comp[k];
+				    	if (nzID != zID)
+				        	zAdjIDArray[t++] = nzID;
+				    }
+
+					double val = 0;
+					for (int s = 0; s < t; s++) {
+							val += x_block[zAdjIDArray[s]];
+					}
+
+					val = (b_block[zID] - val) / (-26.0);
+					normChange += (val - x_block[zID]) * (val - x_block[zID]);
+					x_block[zID] = val;
+				}
+		}
+		normChange = sqrt(normChange) / (iExtBlockSize * jExtBlockSize * kExtBlockSize);
+		return normChange;
+	}
+
+	double GS_Z_block_update006_interior () {
+		double normChange = 0;
+
+		int zAdjIDArray[27];
+		int i_comp[3], j_comp[3], k_comp[3];
+		// update interior
+		int boundary_noneUpdate_width = 2 * halo_width;
+	    i_update_low_zmix  = memoInter[boundary_noneUpdate_width] << 2;
+	   	j_update_low_zmix  = memoInter[boundary_noneUpdate_width] << 1;
+	   	k_update_low_zmix  = memoInter[boundary_noneUpdate_width];
+
+	    i_update_high_zmix = memoInter[iExtBlockSize - boundary_noneUpdate_width] << 2;
+	    j_update_high_zmix = memoInter[jExtBlockSize - boundary_noneUpdate_width] << 1;
+	    k_update_high_zmix = memoInter[kExtBlockSize - boundary_noneUpdate_width];
+
+
+		for (int zID = 0; zID < x_block.size(); zID++) {
+			int iStep = 0, jStep = 0, kStep = 0;
+
+			if ((zID & octMask_i) < i_update_low_zmix || 
+				(zID & octMask_j) < j_update_low_zmix || 
+				(zID & octMask_k) < k_update_low_zmix || 
+				(zID & octMask_i) >= i_update_high_zmix || 
+				(zID & octMask_j) >= j_update_high_zmix || 
+				(zID & octMask_k) >= k_update_high_zmix ) {
+				continue;
+			}
+			
+		    if (zID & octMask_i){
+		        i_comp[iStep++] = ((zID & octMask_i)  - 1)  & octMask_i;
+		    }
+		    i_comp[iStep++] = zID & octMask_i;
+		    if ((zID & octMask_i) != i_bound_inter){
+		         i_comp[iStep++] = ((zID | (~octMask_i)) + 1) & octMask_i;
+		    }
+		    
+		    if (zID & octMask_j){
+		        j_comp[jStep++] = ((zID & octMask_j)  - 1) & octMask_j;
+		    }
+		    j_comp[jStep++] = zID & octMask_j;
+		    if ((zID & octMask_j) != j_bound_inter){
+		        j_comp[jStep++] = ((zID | (~octMask_j)) + 1) & octMask_j;
+		    }
+		    
+		    if (zID  & octMask_k){
+		        k_comp[kStep++] = ((zID & octMask_k)  - 1) & octMask_k;
+		    }
+		    k_comp[kStep++] = zID & octMask_k;
+		    if ((zID & octMask_k) != k_bound_inter){
+		       k_comp[kStep++] = ((zID | (~octMask_k)) + 1) & octMask_k;
+		    }
+
+		   int t = 0;
+		   for (int i = 0; i < iStep; i++)
+		   for (int j = 0; j < jStep; j++)
+		   for (int k = 0; k < kStep; k++) {
+		   		int nzID = i_comp[i] | j_comp[j] | k_comp[k];
+		    	if (nzID != zID)
+		        	zAdjIDArray[t++] = nzID;
+		    }
+
+			double val = 0;
+			for (int s = 0; s < t; s++) {
+					val += x_block[zAdjIDArray[s]];
+			}
+
+			val = (b_block[zID] - val) / (-26.0);
+			normChange += (val - x_block[zID]) * (val - x_block[zID]);
+			x_block[zID] = val;
+			// cout << "::" << val << endl;
+		}
+
+		normChange = sqrt(normChange) / (iExtBlockSize * jExtBlockSize * kExtBlockSize);
+		return normChange;
+
+	}
+
+	double GS_Z_block_update006 () {
+		double outNormVar = GS_Z_block_update006_exterior();
+		double inNormVar =  GS_Z_block_update006_interior();
+		return outNormVar + inNormVar;
 	}
 
 	void haloSend () {
@@ -808,21 +978,27 @@ int main (int argc, char *argv[]) {
 		
 		double err = 1, max_err = 1;
 		double t0 = MPI::Wtime();
+
+		int sig;
+		int next_id = (my_id + 1) % root_process;
+		int pre_id =  my_id ?  my_id - 1 : root_process - 1;
 		for (int i = 0; i < iterationSteps; i++) {
-			err = capsule.GS_Z_block_update004(); 
-			// err = capsule.GS_Z_block_update(); 
-			if (i % 8 == (capsule.halo_width - 1))  {
-				capsule.prepareSendHalo();
-				capsule.haloExchange(); // capsule.haloSend();  capsule.haloRecv();
-				capsule.updateFromRecvHalo();
-				capsule.halo_noneUpdate_width %= capsule.halo_width; 
-				if (capsule.halo_noneUpdate_width == 0) 
-					capsule.halo_noneUpdate_width = capsule.halo_width; 
-			}
+			if (i || my_id)
+				MPI::COMM_WORLD.Recv (&sig, 1, MPI_INT, pre_id, send_data_tag);
+			err =  capsule.GS_Z_block_update006_exterior();
+			MPI::COMM_WORLD.Send (&sig, 1, MPI_INT, next_id, send_data_tag);
+
+			capsule.prepareSendHalo();
+			capsule.haloExchange(); 
+			
+			err += capsule.GS_Z_block_update006_interior();
+			
 		}
+
+
 		double t1 = MPI::Wtime();
     	double elapsed_secs = t1 - t0;
-		// printf("Core: %02i, seconds_elapsed : %f:: Error: %f, Steps : %i (%f, %f) \n", my_id, elapsed_secs, err, iterationSteps, t0, t1);
+		printf("Core: %02i, seconds_elapsed : %f:: Error: %f, Steps : %i (%f, %f) \n", my_id, elapsed_secs, err, iterationSteps, t0, t1);
 		capsule.sendBackToRoot();
 		MPI::COMM_WORLD.Send (&elapsed_secs, 1 , MPI_DOUBLE, root_process, send_data_tag);
 		
