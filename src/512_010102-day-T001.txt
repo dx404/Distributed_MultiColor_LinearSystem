@@ -1,0 +1,3 @@
+Job <621554> is submitted to queue <day>.
+Warning! Rndv Receiver is expecting 0 Bytes But, is receiving 0 Bytes 
+[c-196-49.kd.unc.edu:mpi_rank_0][error_sighandler] Caught error: Segmentation fault (signal 11)

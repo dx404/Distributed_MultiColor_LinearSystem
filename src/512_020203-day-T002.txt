@@ -1,0 +1,26 @@
+Job <621636> is submitted to queue <day>.
+Core: 11, seconds_elapsed : 37.399453:: Error: 0.214977, Steps : 32 (1428888481.625069, 1428888519.024522) 
+Core: 06, seconds_elapsed : 55.044283:: Error: 0.210504, Steps : 32 (1428888463.986255, 1428888519.030538) 
+Core: 05, seconds_elapsed : 58.655064:: Error: 0.086391, Steps : 32 (1428888460.375632, 1428888519.030696) 
+Core: 07, seconds_elapsed : 51.338355:: Error: 0.213162, Steps : 32 (1428888467.692866, 1428888519.031221) 
+Core: 08, seconds_elapsed : 47.753178:: Error: 0.212139, Steps : 32 (1428888471.278300, 1428888519.031478) 
+Core: 09, seconds_elapsed : 44.141983:: Error: 0.213352, Steps : 32 (1428888474.892112, 1428888519.034095) 
+Core: 02, seconds_elapsed : 69.496620:: Error: 0.083942, Steps : 32 (1428888449.537246, 1428888519.033866) 
+Core: 00, seconds_elapsed : 76.792808:: Error: 0.081988, Steps : 32 (1428888442.263308, 1428888519.056116) 
+Core: 04, seconds_elapsed : 62.326746:: Error: 0.086145, Steps : 32 (1428888456.729781, 1428888519.056527) 
+Core: 03, seconds_elapsed : 65.924466:: Error: 0.084413, Steps : 32 (1428888453.132155, 1428888519.056621) 
+Core: 10, seconds_elapsed : 40.563885:: Error: 0.216032, Steps : 32 (1428888478.494582, 1428888519.058467) 
+Core: 01, seconds_elapsed : 73.154155:: Error: 0.083685, Steps : 32 (1428888445.903151, 1428888519.057306) 
+core_linear: 0, err : 0.081988
+core_linear: 1, err : 0.083685
+core_linear: 2, err : 0.083942
+core_linear: 3, err : 0.084413
+core_linear: 4, err : 0.086145
+core_linear: 5, err : 0.086391
+core_linear: 6, err : 0.210504
+core_linear: 7, err : 0.213162
+core_linear: 8, err : 0.212139
+core_linear: 9, err : 0.213352
+core_linear: 10, err : 0.216032
+core_linear: 11, err : 0.214977
+*#06#: 512, 512, 512: 2, 2, 3: 76.792808,0.148894,32

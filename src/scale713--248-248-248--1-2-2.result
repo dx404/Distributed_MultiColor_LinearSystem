@@ -1,0 +1,10 @@
+Job <910284> is submitted to queue <hour>.
+Core: 03, seconds_elapsed : 10.980300:: Error: 0.018079, Steps : 32 (1429723432.893910, 1429723443.874210) 
+Core: 00, seconds_elapsed : 12.472785:: Error: 0.015165, Steps : 32 (1429723431.409451, 1429723443.882236) 
+Core: 01, seconds_elapsed : 11.963570:: Error: 0.016444, Steps : 32 (1429723431.921373, 1429723443.884943) 
+Core: 02, seconds_elapsed : 11.456141:: Error: 0.016764, Steps : 32 (1429723432.426657, 1429723443.882798) 
+core_linear: 0, err : 0.015165
+core_linear: 1, err : 0.016444
+core_linear: 2, err : 0.016764
+core_linear: 3, err : 0.018079
+*#06#: 248, 248, 248: 1, 2, 2: 12.472785,0.016613,32

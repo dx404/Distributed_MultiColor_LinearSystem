@@ -1,0 +1,72 @@
+Sender: LSF System <lsfadmin@c-185-11>
+Subject: Job 847148: <mpirun ./debug/v8.out 2 2 2 1 ./data/One_128_128_128.txt 64> in cluster <killdevil> Done
+
+Job <mpirun ./debug/v8.out 2 2 2 1 ./data/One_128_128_128.txt 64> was submitted from host <killdevil-login2> by user <duozhao> in cluster <killdevil>.
+Job was executed on host(s) <9*c-185-11>, in queue <hour>, as user <duozhao> in cluster <killdevil>.
+                            <1*c-191-17>
+</nas02/home/d/u/duozhao> was used as the home directory.
+</nas02/home/d/u/duozhao/HPCG_2015/Distributed_MultiColor_LinearSystem> was used as the working directory.
+Started at Wed Feb 18 12:47:03 2015
+Results reported on Wed Feb 18 12:47:12 2015
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+mpirun ./debug/v8.out 2 2 2 1 ./data/One_128_128_128.txt 64
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   40.00 sec.
+    Total Requested Memory :                     20.00 GB
+    Delta Memory :                               -
+    Max Processes :                              7
+    Max Threads :                                11
+    Run time :                                   9 sec.
+    Turnaround time :                            12 sec.
+
+The output (if any) follows:
+
+totalSize &&& totalSize &&& 2097152 128
+totalSize &&& totalSize &&& 209715220971522097152   128128128totalSize &&& 
+
+
+2097152 128
+totalSize &&& 2097152 128
+totalSize &&& 2097152 128
+totalSize &&& 2097152 128
+totalSize &&& 2097152 128
+totalSize &&& 2097152 128
+Core: 07, seconds_elapsed : 2.471064:: Error: 0.007917, Steps : 64 (1424281626.183010, 1424281628.654074) 
+Core: 05, seconds_elapsed : 2.583407:: Error: 0.007850, Steps : 64 (1424281626.070720, 1424281628.654127) 
+Core: 04, seconds_elapsed : 2.638532:: Error: 0.007762, Steps : 64 (1424281626.015666, 1424281628.654198) 
+Core: 06, seconds_elapsed : 2.527224:: Error: 0.007827, Steps : 64 (1424281626.126991, 1424281628.654215) 
+Core: 03, seconds_elapsed : 2.693693:: Error: 0.003539, Steps : 64 (1424281625.960627, 1424281628.654320) 
+Core: 02, seconds_elapsed : 2.749361:: Error: 0.003501, Steps : 64 (1424281625.905058, 1424281628.654419) 
+Core: 01, seconds_elapsed : 2.804744:: Error: 0.003493, Steps : 64 (1424281625.849726, 1424281628.654470) 
+Core: 00, seconds_elapsed : 2.860236:: Error: 0.003456, Steps : 64 (1424281625.794344, 1424281628.654580) 
+2.860236	0.000000	64
+Here: x.size():2097152 totalSize: 2097152
+Job  /opt/lsf/9.1/linux2.6-glibc2.3-x86_64/bin/mvapich_wrapper ./debug/v8.out 2 2 2 1 ./data/One_128_128_128.txt 64
+
+TID   HOST_NAME   COMMAND_LINE            STATUS            TERMINATION_TIME
+===== ========== ================  =======================  ===================
+00000 c-191-17   ./debug/v8.out 2  Done                     02/18/2015 12:47:08
+00001 c-185-11   ./debug/v8.out 2  Done                     02/18/2015 12:47:08
+00002 c-185-11   ./debug/v8.out 2  Done                     02/18/2015 12:47:08
+00003 c-185-11   ./debug/v8.out 2  Done                     02/18/2015 12:47:08
+00004 c-185-11   ./debug/v8.out 2  Done                     02/18/2015 12:47:08
+00005 c-185-11   ./debug/v8.out 2  Done                     02/18/2015 12:47:08
+00006 c-185-11   ./debug/v8.out 2  Done                     02/18/2015 12:47:08
+00007 c-185-11   ./debug/v8.out 2  Done                     02/18/2015 12:47:08
+00008 c-185-11   ./debug/v8.out 2  Done                     02/18/2015 12:47:08
+00009 c-185-11   ./debug/v8.out 2  Done                     02/18/2015 12:47:08
+
+
+PS:
+
+Read file <./output/err.847148> for stderr output of this job.
+

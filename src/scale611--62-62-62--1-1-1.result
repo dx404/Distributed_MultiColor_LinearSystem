@@ -1,0 +1,4 @@
+Job <905846> is submitted to queue <hour>.
+Core: 00, seconds_elapsed : 0.603611:: Error: 0.007123, Steps : 32 (1429718046.939188, 1429718047.542799) 
+core_linear: 0, err : 0.007123
+*#06#: 62, 62, 62: 1, 1, 1: 0.603611,0.007123,32

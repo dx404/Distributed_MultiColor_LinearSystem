@@ -1,0 +1,71 @@
+Sender: LSF System <lsfadmin@c-193-41>
+Subject: Job 182525: <mpirun ./debug/v8_noPipe.out 2 2 2 1 ./data/256_256_256.txt 256> in cluster <killdevil> Done
+
+Job <mpirun ./debug/v8_noPipe.out 2 2 2 1 ./data/256_256_256.txt 256> was submitted from host <killdevil-login1> by user <duozhao> in cluster <killdevil>.
+Job was executed on host(s) <10*c-193-41>, in queue <debug>, as user <duozhao> in cluster <killdevil>.
+</nas02/home/d/u/duozhao> was used as the home directory.
+</nas02/home/d/u/duozhao/HPCG_2015/Distributed_MultiColor_LinearSystem> was used as the working directory.
+Started at Wed Feb 25 14:20:16 2015
+Results reported on Wed Feb 25 14:21:26 2015
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+mpirun ./debug/v8_noPipe.out 2 2 2 1 ./data/256_256_256.txt 256
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   650.00 sec.
+    Max Memory :                                 1 GB
+    Average Memory :                             0.33 GB
+    Total Requested Memory :                     -
+    Delta Memory :                               -
+    Max Swap :                                   1 GB
+    Max Processes :                              16
+    Max Threads :                                20
+    Run time :                                   70 sec.
+    Turnaround time :                            73 sec.
+
+The output (if any) follows:
+
+Core: 07, seconds_elapsed : 53.235638:: Error: 0.005845, Steps : 256 (1424892028.085510, 1424892081.321148) 
+Core: 06, seconds_elapsed : 53.620023:: Error: 0.005813, Steps : 256 (1424892027.701734, 1424892081.321757) 
+Core: 04, seconds_elapsed : 54.397217:: Error: 0.005797, Steps : 256 (1424892026.925226, 1424892081.322443) 
+Core: 05, seconds_elapsed : 54.004170:: Error: 0.005829, Steps : 256 (1424892027.318450, 1424892081.322620) 
+Core: 02, seconds_elapsed : 55.188446:: Error: 0.002619, Steps : 256 (1424892026.134244, 1424892081.322690) 
+Core: 03, seconds_elapsed : 54.790148:: Error: 0.002632, Steps : 256 (1424892026.532556, 1424892081.322704) 
+Core: 01, seconds_elapsed : 55.588190:: Error: 0.002618, Steps : 256 (1424892025.734784, 1424892081.322974) 
+Core: 00, seconds_elapsed : 55.987933:: Error: 0.002605, Steps : 256 (1424892025.335390, 1424892081.323323) 
+core_linear: 0, err : 0.002605
+core_linear: 1, err : 0.002618
+core_linear: 2, err : 0.002619
+core_linear: 3, err : 0.002632
+core_linear: 4, err : 0.005797
+core_linear: 5, err : 0.005829
+core_linear: 6, err : 0.005813
+core_linear: 7, err : 0.005845
+*#06#,55.987933,0.004220,256
+Job  /opt/lsf/9.1/linux2.6-glibc2.3-x86_64/bin/mvapich_wrapper ./debug/v8_noPipe.out 2 2 2 1 ./data/256_256_256.txt 256
+
+TID   HOST_NAME   COMMAND_LINE            STATUS            TERMINATION_TIME
+===== ========== ================  =======================  ===================
+00000 c-193-41   ./debug/v8_noPip  Done                     02/25/2015 14:21:22
+00001 c-193-41   ./debug/v8_noPip  Done                     02/25/2015 14:21:22
+00002 c-193-41   ./debug/v8_noPip  Done                     02/25/2015 14:21:22
+00003 c-193-41   ./debug/v8_noPip  Done                     02/25/2015 14:21:22
+00004 c-193-41   ./debug/v8_noPip  Done                     02/25/2015 14:21:22
+00005 c-193-41   ./debug/v8_noPip  Done                     02/25/2015 14:21:22
+00006 c-193-41   ./debug/v8_noPip  Done                     02/25/2015 14:21:22
+00007 c-193-41   ./debug/v8_noPip  Done                     02/25/2015 14:21:22
+00008 c-193-41   ./debug/v8_noPip  Done                     02/25/2015 14:21:22
+00009 c-193-41   ./debug/v8_noPip  Done                     02/25/2015 14:21:22
+
+
+PS:
+
+Read file <./output/err.182525> for stderr output of this job.
+

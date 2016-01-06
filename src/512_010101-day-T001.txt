@@ -1,0 +1,14 @@
+Job <621555> is submitted to queue <day>.
+Warning! Rndv Receiver is expecting 0 Bytes But, is receiving 0 Bytes 
+[c-196-03.kd.unc.edu:mpi_rank_0][error_sighandler] Caught error: Segmentation fault (signal 11)
+
+=====================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   EXIT CODE: 139
+=   CLEANING UP REMAINING PROCESSES
+=   YOU CAN IGNORE THE BELOW CLEANUP MESSAGES
+=====================================================================================
+[proxy:0:1@c-195-60.kd.unc.edu] HYD_pmcd_pmip_control_cmd_cb (./pm/pmiserv/pmip_cb.c:906): assert (!closed) failed
+[proxy:0:1@c-195-60.kd.unc.edu] HYDT_dmxu_poll_wait_for_event (./tools/demux/demux_poll.c:77): callback returned error status
+[proxy:0:1@c-195-60.kd.unc.edu] main (./pm/pmiserv/pmip.c:226): demux engine error waiting for event
+APPLICATION TERMINATED WITH THE EXIT STRING: Segmentation fault (signal 11)

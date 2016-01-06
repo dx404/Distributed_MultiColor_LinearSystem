@@ -1,0 +1,66 @@
+Sender: LSF System <lsfadmin@c-195-31>
+Subject: Job 840435: <####   run_mycode    ####;#BSUB -n 10;#BSUB -q hour;#BSUB -e err.%J;#BSUB -o out.%J;mpirun ./a.out 2 2 2 1 dataSheet_128_128_128.txt 32;##### end of run_mycode ####> in cluster <killdevil> Done
+
+Job <####   run_mycode    ####;#BSUB -n 10;#BSUB -q hour;#BSUB -e err.%J;#BSUB -o out.%J;mpirun ./a.out 2 2 2 1 dataSheet_128_128_128.txt 32;##### end of run_mycode ####> was submitted from host <killdevil-login2> by user <duozhao> in cluster <killdevil>.
+Job was executed on host(s) <10*c-195-31>, in queue <hour>, as user <duozhao> in cluster <killdevil>.
+</nas02/home/d/u/duozhao> was used as the home directory.
+</nas02/home/d/u/duozhao/HPCG_2015/Distributed_MultiColor_LinearSystem> was used as the working directory.
+Started at Wed Feb 18 10:50:08 2015
+Results reported on Wed Feb 18 10:50:16 2015
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+####   run_mycode    ####
+#BSUB -n 10
+#BSUB -q hour
+#BSUB -e err.%J
+#BSUB -o out.%J
+mpirun ./a.out 2 2 2 1 dataSheet_128_128_128.txt 32
+##### end of run_mycode ####
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   30.00 sec.
+    Total Requested Memory :                     20.00 GB
+    Delta Memory :                               -
+    Max Processes :                              7
+    Max Threads :                                11
+    Run time :                                   8 sec.
+    Turnaround time :                            11 sec.
+
+The output (if any) follows:
+
+Core: 07, seconds_elapsed : 1.205994:: Error: 0.014063, Steps : 32 (1424274610.961280, 1424274612.167274) 
+Core: 06, seconds_elapsed : 1.260434:: Error: 0.013919, Steps : 32 (1424274610.906940, 1424274612.167374) 
+Core: 05, seconds_elapsed : 1.314929:: Error: 0.013957, Steps : 32 (1424274610.852533, 1424274612.167462) 
+Core: 04, seconds_elapsed : 1.368835:: Error: 0.013816, Steps : 32 (1424274610.798677, 1424274612.167512) 
+Core: 01, seconds_elapsed : 1.529240:: Error: 0.006146, Steps : 32 (1424274610.638504, 1424274612.167744) 
+Core: 03, seconds_elapsed : 1.422473:: Error: 0.006220, Steps : 32 (1424274610.745271, 1424274612.167744) 
+Core: 02, seconds_elapsed : 1.476602:: Error: 0.006155, Steps : 32 (1424274610.691242, 1424274612.167844) 
+Core: 00, seconds_elapsed : 1.582063:: Error: 0.006082, Steps : 32 (1424274610.586038, 1424274612.168101) 
+1.582063	0.000000	32
+Job  /opt/lsf/9.1/linux2.6-glibc2.3-x86_64/bin/mvapich_wrapper ./a.out 2 2 2 1 dataSheet_128_128_128.txt 32
+
+TID   HOST_NAME   COMMAND_LINE            STATUS            TERMINATION_TIME
+===== ========== ================  =======================  ===================
+00000 c-195-31   ./a.out 2 2 2 1   Done                     02/18/2015 10:50:12
+00001 c-195-31   ./a.out 2 2 2 1   Done                     02/18/2015 10:50:12
+00002 c-195-31   ./a.out 2 2 2 1   Done                     02/18/2015 10:50:12
+00003 c-195-31   ./a.out 2 2 2 1   Done                     02/18/2015 10:50:12
+00004 c-195-31   ./a.out 2 2 2 1   Done                     02/18/2015 10:50:12
+00005 c-195-31   ./a.out 2 2 2 1   Done                     02/18/2015 10:50:12
+00006 c-195-31   ./a.out 2 2 2 1   Done                     02/18/2015 10:50:12
+00007 c-195-31   ./a.out 2 2 2 1   Done                     02/18/2015 10:50:12
+00008 c-195-31   ./a.out 2 2 2 1   Done                     02/18/2015 10:50:12
+00009 c-195-31   ./a.out 2 2 2 1   Done                     02/18/2015 10:50:12
+
+
+PS:
+
+Read file <err.840435> for stderr output of this job.
+

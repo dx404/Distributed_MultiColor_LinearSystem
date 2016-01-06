@@ -1,0 +1,98 @@
+Job <905851> is submitted to queue <hour>.
+Core: 01, seconds_elapsed : 1.218153:: Error: 0.031916, Steps : 32 (1429718052.682597, 1429718053.900750) 
+Core: 08, seconds_elapsed : 1.138275:: Error: 0.035451, Steps : 32 (1429718052.760233, 1429718053.898508) 
+Core: 05, seconds_elapsed : 1.172256:: Error: 0.035928, Steps : 32 (1429718052.728534, 1429718053.900790) 
+Core: 02, seconds_elapsed : 1.205920:: Error: 0.034698, Steps : 32 (1429718052.694933, 1429718053.900853) 
+Core: 04, seconds_elapsed : 1.183754:: Error: 0.031963, Steps : 32 (1429718052.717115, 1429718053.900869) 
+Core: 03, seconds_elapsed : 1.195066:: Error: 0.036788, Steps : 32 (1429718052.705916, 1429718053.900982) 
+Core: 19, seconds_elapsed : 1.010132:: Error: 0.079299, Steps : 32 (1429718052.889350, 1429718053.899482) 
+Core: 17, seconds_elapsed : 1.033388:: Error: 0.074888, Steps : 32 (1429718052.867852, 1429718053.901240) 
+Core: 20, seconds_elapsed : 0.998724:: Error: 0.073418, Steps : 32 (1429718052.900756, 1429718053.899480) 
+Core: 22, seconds_elapsed : 0.976741:: Error: 0.082396, Steps : 32 (1429718052.922433, 1429718053.899174) 
+Core: 00, seconds_elapsed : 1.230663:: Error: 0.028133, Steps : 32 (1429718052.671454, 1429718053.902117) 
+Core: 12, seconds_elapsed : 1.093960:: Error: 0.039186, Steps : 32 (1429718052.804920, 1429718053.898880) 
+Core: 11, seconds_elapsed : 1.105802:: Error: 0.044544, Steps : 32 (1429718052.793262, 1429718053.899064) 
+Core: 07, seconds_elapsed : 1.149959:: Error: 0.040911, Steps : 32 (1429718052.749368, 1429718053.899327) 
+Core: 45, seconds_elapsed : 0.704408:: Error: 0.132062, Steps : 32 (1429718053.195595, 1429718053.900003) 
+Core: 29, seconds_elapsed : 0.896122:: Error: 0.087308, Steps : 32 (1429718053.005037, 1429718053.901159) 
+Core: 31, seconds_elapsed : 0.874115:: Error: 0.091528, Steps : 32 (1429718053.026592, 1429718053.900707) 
+Core: 18, seconds_elapsed : 1.022196:: Error: 0.077954, Steps : 32 (1429718052.879553, 1429718053.901749) 
+Core: 09, seconds_elapsed : 1.128351:: Error: 0.039533, Steps : 32 (1429718052.769827, 1429718053.898178) 
+Core: 35, seconds_elapsed : 0.825678:: Error: 0.123219, Steps : 32 (1429718053.075631, 1429718053.901309) 
+Core: 26, seconds_elapsed : 0.930838:: Error: 0.086289, Steps : 32 (1429718052.966881, 1429718053.897719) 
+Core: 21, seconds_elapsed : 0.987900:: Error: 0.079285, Steps : 32 (1429718052.911508, 1429718053.899408) 
+Core: 10, seconds_elapsed : 1.116860:: Error: 0.042461, Steps : 32 (1429718052.783433, 1429718053.900293) 
+Core: 14, seconds_elapsed : 1.072066:: Error: 0.046234, Steps : 32 (1429718052.828732, 1429718053.900798) 
+Core: 06, seconds_elapsed : 1.161606:: Error: 0.038807, Steps : 32 (1429718052.738209, 1429718053.899815) 
+Core: 13, seconds_elapsed : 1.083092:: Error: 0.043319, Steps : 32 (1429718052.815990, 1429718053.899082) 
+Core: 30, seconds_elapsed : 0.885339:: Error: 0.090376, Steps : 32 (1429718053.015389, 1429718053.900728) 
+Core: 28, seconds_elapsed : 0.907836:: Error: 0.081362, Steps : 32 (1429718052.991544, 1429718053.899380) 
+Core: 34, seconds_elapsed : 0.837824:: Error: 0.122846, Steps : 32 (1429718053.064427, 1429718053.902251) 
+Core: 36, seconds_elapsed : 0.814522:: Error: 0.116511, Steps : 32 (1429718053.085171, 1429718053.899693) 
+Core: 43, seconds_elapsed : 0.729714:: Error: 0.131296, Steps : 32 (1429718053.170978, 1429718053.900692) 
+Core: 25, seconds_elapsed : 0.943006:: Error: 0.083174, Steps : 32 (1429718052.955483, 1429718053.898489) 
+Core: 15, seconds_elapsed : 1.059458:: Error: 0.048249, Steps : 32 (1429718052.841989, 1429718053.901447) 
+Core: 42, seconds_elapsed : 0.741622:: Error: 0.131037, Steps : 32 (1429718053.157118, 1429718053.898740) 
+Core: 46, seconds_elapsed : 0.692750:: Error: 0.135137, Steps : 32 (1429718053.209101, 1429718053.901851) 
+Core: 37, seconds_elapsed : 0.802767:: Error: 0.124009, Steps : 32 (1429718053.097238, 1429718053.900005) 
+Core: 24, seconds_elapsed : 0.954814:: Error: 0.077235, Steps : 32 (1429718052.945015, 1429718053.899829) 
+Core: 23, seconds_elapsed : 0.966499:: Error: 0.083698, Steps : 32 (1429718052.933496, 1429718053.899995) 
+Core: 38, seconds_elapsed : 0.790642:: Error: 0.127131, Steps : 32 (1429718053.109889, 1429718053.900531) 
+Core: 44, seconds_elapsed : 0.717243:: Error: 0.124501, Steps : 32 (1429718053.183923, 1429718053.901166) 
+Core: 33, seconds_elapsed : 0.850129:: Error: 0.119765, Steps : 32 (1429718053.051004, 1429718053.901133) 
+Core: 39, seconds_elapsed : 0.778910:: Error: 0.127451, Steps : 32 (1429718053.122409, 1429718053.901319) 
+Core: 41, seconds_elapsed : 0.753768:: Error: 0.127913, Steps : 32 (1429718053.146361, 1429718053.900129) 
+Core: 16, seconds_elapsed : 1.046601:: Error: 0.069148, Steps : 32 (1429718052.855402, 1429718053.902003) 
+Core: 47, seconds_elapsed : 0.681034:: Error: 0.135310, Steps : 32 (1429718053.218003, 1429718053.899037) 
+core_linear: 0, err : 0.028133
+Core: 27, seconds_elapsed : 0.920257:: Error: 0.087534, Steps : 32 (1429718052.980208, 1429718053.900465) 
+Core: 32, seconds_elapsed : 0.862719:: Error: 0.112393, Steps : 32 (1429718053.038139, 1429718053.900858) 
+Core: 40, seconds_elapsed : 0.766409:: Error: 0.120347, Steps : 32 (1429718053.138103, 1429718053.904512) 
+core_linear: 1, err : 0.031916
+core_linear: 2, err : 0.034698
+core_linear: 3, err : 0.036788
+core_linear: 4, err : 0.031963
+core_linear: 5, err : 0.035928
+core_linear: 6, err : 0.038807
+core_linear: 7, err : 0.040911
+core_linear: 8, err : 0.035451
+core_linear: 9, err : 0.039533
+core_linear: 10, err : 0.042461
+core_linear: 11, err : 0.044544
+core_linear: 12, err : 0.039186
+core_linear: 13, err : 0.043319
+core_linear: 14, err : 0.046234
+core_linear: 15, err : 0.048249
+core_linear: 16, err : 0.069148
+core_linear: 17, err : 0.074888
+core_linear: 18, err : 0.077954
+core_linear: 19, err : 0.079299
+core_linear: 20, err : 0.073418
+core_linear: 21, err : 0.079285
+core_linear: 22, err : 0.082396
+core_linear: 23, err : 0.083698
+core_linear: 24, err : 0.077235
+core_linear: 25, err : 0.083174
+core_linear: 26, err : 0.086289
+core_linear: 27, err : 0.087534
+core_linear: 28, err : 0.081362
+core_linear: 29, err : 0.087308
+core_linear: 30, err : 0.090376
+core_linear: 31, err : 0.091528
+core_linear: 32, err : 0.112393
+core_linear: 33, err : 0.119765
+core_linear: 34, err : 0.122846
+core_linear: 35, err : 0.123219
+core_linear: 36, err : 0.116511
+core_linear: 37, err : 0.124009
+core_linear: 38, err : 0.127131
+core_linear: 39, err : 0.127451
+core_linear: 40, err : 0.120347
+core_linear: 41, err : 0.127913
+core_linear: 42, err : 0.131037
+core_linear: 43, err : 0.131296
+core_linear: 44, err : 0.124501
+core_linear: 45, err : 0.132062
+core_linear: 46, err : 0.135137
+core_linear: 47, err : 0.135310
+*#06#: 186, 248, 248: 3, 4, 4: 1.230663,0.081957,32

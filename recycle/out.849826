@@ -1,0 +1,52 @@
+Sender: LSF System <lsfadmin@c-193-52>
+Subject: Job 849826: <mpirun ./debug/v5.out 2 2 2 1 ./data/One_128_128_128.txt 16> in cluster <killdevil> Exited
+
+Job <mpirun ./debug/v5.out 2 2 2 1 ./data/One_128_128_128.txt 16> was submitted from host <killdevil-login2> by user <duozhao> in cluster <killdevil>.
+Job was executed on host(s) <3*c-193-52>, in queue <hour>, as user <duozhao> in cluster <killdevil>.
+                            <7*c-195-18>
+</nas02/home/d/u/duozhao> was used as the home directory.
+</nas02/home/d/u/duozhao/HPCG_2015/Distributed_MultiColor_LinearSystem> was used as the working directory.
+Started at Wed Feb 18 13:51:04 2015
+Results reported on Wed Feb 18 13:51:10 2015
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+mpirun ./debug/v5.out 2 2 2 1 ./data/One_128_128_128.txt 16
+------------------------------------------------------------
+
+Exited with exit code 1.
+
+Resource usage summary:
+
+    CPU time :                                   0.21 sec.
+    Total Requested Memory :                     20.00 GB
+    Delta Memory :                               -
+    Max Processes :                              7
+    Max Threads :                                11
+    Run time :                                   6 sec.
+    Turnaround time :                            7 sec.
+
+The output (if any) follows:
+
+Job  /opt/lsf/9.1/linux2.6-glibc2.3-x86_64/bin/mvapich_wrapper ./debug/v5.out 2 2 2 1 ./data/One_128_128_128.txt 16
+
+TID   HOST_NAME   COMMAND_LINE            STATUS            TERMINATION_TIME
+===== ========== ================  =======================  ===================
+00000 c-195-18   ./debug/v5.out 2  Exit (127)               02/18/2015 13:51:07
+00001 c-195-18   ./debug/v5.out 2  Exit (127)               02/18/2015 13:51:04
+00002 c-195-18   ./debug/v5.out 2  Exit (127)               02/18/2015 13:51:04
+00003 c-195-18   ./debug/v5.out 2  Exit (127)               02/18/2015 13:51:04
+00004 c-195-18   ./debug/v5.out 2  Exit (127)               02/18/2015 13:51:04
+00005 c-195-18   ./debug/v5.out 2  Exit (127)               02/18/2015 13:51:04
+00006 c-195-18   ./debug/v5.out 2  Exit (127)               02/18/2015 13:51:04
+00007 c-193-52   ./debug/v5.out 2  Exit (127)               02/18/2015 13:51:05
+00008 c-193-52   ./debug/v5.out 2  Exit (127)               02/18/2015 13:51:05
+00009 c-193-52   ./debug/v5.out 2  Exit (127)               02/18/2015 13:51:05
+
+
+PS:
+
+Read file <./output/err.849826> for stderr output of this job.
+

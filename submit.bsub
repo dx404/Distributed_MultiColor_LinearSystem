@@ -1,0 +1,7 @@
+####   run_mycode    ####
+#BSUB -n 10
+#BSUB -q hour
+#BSUB -e err.%J
+#BSUB -o out.%J
+mpirun ./a.out 2 2 2 1 dataSheet_128_128_128.txt 4
+##### end of run_mycode ####

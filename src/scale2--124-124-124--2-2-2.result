@@ -1,0 +1,18 @@
+Job <688398> is submitted to queue <hour>.
+Core: 02, seconds_elapsed : 0.633117:: Error: 0.015426, Steps : 32 (1429046420.157494, 1429046420.790611) 
+Core: 03, seconds_elapsed : 0.623380:: Error: 0.018487, Steps : 32 (1429046420.164239, 1429046420.787619) 
+Core: 07, seconds_elapsed : 0.584231:: Error: 0.034125, Steps : 32 (1429046420.205814, 1429046420.790045) 
+Core: 01, seconds_elapsed : 0.643020:: Error: 0.014666, Steps : 32 (1429046420.147704, 1429046420.790724) 
+Core: 04, seconds_elapsed : 0.612336:: Error: 0.026910, Steps : 32 (1429046420.175375, 1429046420.787711) 
+Core: 05, seconds_elapsed : 0.602557:: Error: 0.030192, Steps : 32 (1429046420.185152, 1429046420.787709) 
+Core: 06, seconds_elapsed : 0.593405:: Error: 0.030842, Steps : 32 (1429046420.196830, 1429046420.790235) 
+Core: 00, seconds_elapsed : 0.652954:: Error: 0.011680, Steps : 32 (1429046420.137908, 1429046420.790862) 
+core_linear: 0, err : 0.011680
+core_linear: 1, err : 0.014666
+core_linear: 2, err : 0.015426
+core_linear: 3, err : 0.018487
+core_linear: 4, err : 0.026910
+core_linear: 5, err : 0.030192
+core_linear: 6, err : 0.030842
+core_linear: 7, err : 0.034125
+*#06#: 124, 124, 124: 2, 2, 2: 0.652954,0.022791,32

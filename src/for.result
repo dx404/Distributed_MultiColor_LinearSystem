@@ -1,0 +1,6 @@
+M 20 Ip n 1906626 q hour mpiexec np 1906625 ./GS_OOP_v8_noPipe.out 124 124 124 1 ../data/124.txt 32
+M 20 Ip n 15252994 q hour mpiexec np 15252993 ./GS_OOP_v8_noPipe.out 248 248 248 1 ../data/248.txt 32
+M 20 Ip n 29791002 q hour mpiexec np 29791001 ./GS_OOP_v8_noPipe.out 310 310 310 1 ../data/310.txt 32
+M 20 Ip n 6434858 q hour mpiexec np 6434857 ./GS_OOP_v8_noPipe.out 186 186 186 1 ../data/186.txt 32
+M 20 Ip n 238330 q hour mpiexec np 238329 ./GS_OOP_v8_noPipe.out 62 62 62 1 ../data/62.txt 32
+M 20 Ip n 51478850 q hour mpiexec np 51478849 ./GS_OOP_v8_noPipe.out 372 372 372 1 ../data/372.txt 32

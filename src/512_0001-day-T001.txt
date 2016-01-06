@@ -1,0 +1,2 @@
+Job <621536> is submitted to queue <day>.
+Please input : numCore_i, numCore_j, numCore_k, halo_width, inputFileName, iterationSteps
